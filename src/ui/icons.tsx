@@ -86,3 +86,9 @@ export const WarningIcon = () => <svg width="16" height="16" viewBox="0 0 24 24"
   <path d="M12 8.75v4" fill="none" stroke="#C53838" strokeWidth="1.8" strokeLinecap="round" />
   <circle cx="12" cy="15.75" r="1" fill="#C53838" />
 </svg>;
+export const MenuCheck = ({ on }: { on: boolean }) => <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style={{ opacity: on ? 1 : 0 }}>
+  <path d="M3.5 8.5l3 3 6-7" fill="none" stroke="#18181B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+</svg>;
+export const DoubleCheck = () => <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+  <path d="M1.5 8.5l3 3 6-7M8.5 11.5l6-7" fill="none" stroke="#18181B99" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+</svg>;

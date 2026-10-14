@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource-variable/space-grotesk';
 import Kitchen from './Kitchen';
@@ -8,7 +8,7 @@ import { ALTERNATIVES, formatDate, type Alternative } from './replacements';
 import { productShots } from './kitchen/productShots';
 import type { PendantKind } from './kitchen/pendants';
 import { Rail, TopNav } from './ui/Shell';
-import DecisionsPanel, { Swatch } from './ui/DecisionsPanel';
+import DecisionsPanel from './ui/DecisionsPanel';
 import ReplacePanel from './ui/ReplacePanel';
 import MyThingsPanel, { type Stage } from './ui/MyThingsPanel';
 import './styles.css';
@@ -39,7 +39,11 @@ function App() {
     return () => query.removeEventListener('change', update);
   }, []);
   // Product shots render offscreen; warm them while the user is still looking around.
-  useEffect(() => { const id = requestIdleCallback(() => productShots()); return () => cancelIdleCallback(id); }, []);
+  // Safari has no requestIdleCallback, so fall back to a short timeout there.
+  useEffect(() => {
+    if ('requestIdleCallback' in window) { const id = requestIdleCallback(() => productShots()); return () => cancelIdleCallback(id); }
+    const id = setTimeout(() => productShots(), 1500); return () => clearTimeout(id);
+  }, []);
   useEffect(() => {
     if (stage !== 'understanding') return;
     // Deliberately mocked recognition: 2.1 seconds, zero network requests.
@@ -68,6 +72,7 @@ function App() {
     setHovered(id);
     setRead(prev => prev.has(id) ? prev : new Set(prev).add(id));
   }
+  const markAllSeen = useCallback(() => setRead(new Set(DECISIONS.map(d => d.id))), []);
   function leaveCard(id: DecisionId) { setHovered(h => h === id ? null : h); setPreviewing(null); }
   function applyReplacement(id: Alternative['id']) {
     const alt = ALTERNATIVES.find(a => a.id === id)!;
@@ -95,7 +100,7 @@ function App() {
   const focus: DecisionId | null = panel === 'replace' ? 'pendant' : panel === 'decisions' ? hovered : null;
   const inset = panel ? PANEL_EDGE : RAIL_WIDTH;
 
-  return <main style={{ '--inset': `${inset}px` } as CSSProperties}>
+  return <main>
     <div className="scene">
       <Kitchen item={personalItems[0] ?? null} settled={stage === 'placed'} reduced={reduced} finishes={finishes} focus={focus} inset={inset} />
     </div>
@@ -103,13 +108,10 @@ function App() {
     <Rail active={panel === 'things' ? 'things' : panel ? 'decisions' : null}
       onAdd={() => open(panel === 'things' ? null : 'things')} onDecisions={() => open(panel === 'decisions' || panel === 'replace' ? null : 'decisions')} />
     {(panel === 'decisions' || panel === 'replace') && <DecisionsPanel decisions={decisions} read={read} previewing={previewing} hidden={panel === 'replace'} totals={totals}
-      onCardEnter={enterCard} onCardLeave={leaveCard} onPreview={setPreviewing} onReplace={() => open('replace')} onClose={() => open(null)} />}
+      onCardEnter={enterCard} onCardLeave={leaveCard} onPreview={setPreviewing} onReplace={() => open('replace')} onClose={() => open(null)} onMarkAllSeen={markAllSeen} />}
     {panel === 'replace' && <ReplacePanel onBack={() => open('decisions')} onClose={() => open(null)} onPreview={setReplacePreview} onApply={applyReplacement} />}
     {panel === 'things' && <MyThingsPanel stage={stage} step={step} url={sourceUrl} error={error} onStart={() => setStage('link')}
       onUrl={url => { setSourceUrl(url); setError(''); }} onSubmit={submit} onRemove={removeThing} onClose={() => open(null)} />}
-    {preview && <div className="preview-badge" role="status">
-      <Swatch style={preview.swatch} photo={preview.photo} /><span>Previous selection</span><span>{preview.label}</span>
-    </div>}
   </main>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

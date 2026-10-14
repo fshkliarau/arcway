@@ -42,7 +42,26 @@ export const CURRENT_FINISHES = finishesOf(DECISIONS);
 
 // Estimate before this round of kitchen decisions; "now" adds their deltas.
 export const BASE_ESTIMATE = 638_170;
-export const EARLIER = { count: 4, rooms: 'Primary bath, Garage', delta: 170 };
+// Earlier decisions in rooms without a 3D model yet (shown via the room filter).
+export type Room = 'kitchen' | 'primary-bath' | 'garage';
+export const ROOMS: { id: Room; label: string }[] = [
+  { id: 'kitchen', label: 'Kitchen' }, { id: 'primary-bath', label: 'Primary bath' }, { id: 'garage', label: 'Garage' },
+];
+export type LogEntry = {
+  id: string; room: Exclude<Room, 'kitchen'>; title: string; author: string; time: string; delta: number;
+  before: { label: string; swatch: CSSProperties }; after: { label: string; swatch: CSSProperties };
+};
+export const EARLIER_DECISIONS: LogEntry[] = [
+  { id: 'bath-faucet', room: 'primary-bath', title: 'Vanity faucet', author: 'J. Johnson', time: 'Sun', delta: 120,
+    before: { label: 'Polished Chrome', swatch: { backgroundImage: 'linear-gradient(135deg, #F4F5F6, #B7BABE)' } }, after: { label: 'Matte Black', swatch: { backgroundColor: '#26262A' } } },
+  { id: 'bath-mirror', room: 'primary-bath', title: 'Mirror', author: 'M. Reyes', time: 'Sun', delta: -80,
+    before: { label: 'Backlit Round', swatch: { backgroundColor: '#E6ECEE' } }, after: { label: 'Framed Oak', swatch: { backgroundImage: 'linear-gradient(90deg, #C49A6C, #A97D52 50%, #C29669)' } } },
+  { id: 'garage-door', room: 'garage', title: 'Garage door', author: 'M. Reyes', time: 'Sat', delta: 90,
+    before: { label: 'Raised Panel', swatch: { backgroundColor: '#D9D6CF' } }, after: { label: 'Flush Steel', swatch: { backgroundColor: '#5E6164' } } },
+  { id: 'garage-storage', room: 'garage', title: 'Storage wall', author: 'J. Johnson', time: 'Sat', delta: 40,
+    before: { label: 'Open Shelving', swatch: { backgroundColor: '#C9B79C' } }, after: { label: 'Slatwall', swatch: { backgroundColor: '#8F9396' } } },
+];
+export const EARLIER = { count: EARLIER_DECISIONS.length, rooms: 'Primary bath, Garage', delta: EARLIER_DECISIONS.reduce((s, d) => s + d.delta, 0) };
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 export const money = (n: number) => usd.format(n);
 export const signed = (n: number) => `${n < 0 ? '−' : '+'}${usd.format(Math.abs(n))}`;
