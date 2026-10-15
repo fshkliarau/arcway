@@ -34,16 +34,16 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 
 /* Top nav: compact pill + estimate / share */
 .nav-pill {
-  position: absolute; left: 8px; top: 8px; width: 448px; height: 48px;
-  display: flex; align-items: center; gap: 16px; padding: 0 8px 0 18px;
+  position: absolute; left: 8px; top: 8px; z-index: 10; height: 48px;
+  display: flex; align-items: center; gap: 14px; padding: 0 6px 0 18px;
   border-radius: 16px; background: #00000014; backdrop-filter: blur(5px);
   filter: drop-shadow(#0000000D 0 1px 2.5px);
 }
 .nav-icon { display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0; padding: 0; border: 0; background: none; }
 .nav-divider { width: 1px; height: 20px; background: #18181B1F; flex-shrink: 0; }
 .project-switcher {
-  flex: 1; height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 0 10px 0 4px; border: 0; border-radius: 10px; background: transparent;
+  height: 36px; display: flex; align-items: center; gap: 6px;
+  padding: 0 6px 0 2px; border: 0; border-radius: 10px; background: transparent;
   font-size: 14px; line-height: 18px; font-weight: 500; text-align: left; transition: background 150ms ease;
 }
 .nav-actions { position: absolute; right: 20px; top: 20px; display: flex; align-items: center; gap: 20px; filter: drop-shadow(#0000000D 0 1px 2.5px); }
@@ -56,30 +56,31 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
   filter: drop-shadow(#0000000D 0 1px 1px); transition: background 150ms ease;
 }
 
-/* Left rail */
-.add-tile {
-  position: absolute; left: 8px; top: 64px; width: 80px; height: 80px; display: grid; place-items: center;
-  border: 0; border-radius: 16px; background: var(--lime); transition: background 150ms ease, box-shadow 150ms ease;
+/* Sections in the top pill (Paper: Minimal nav — Option 4). Labels are hover tooltips. */
+.nav-sections { display: flex; align-items: center; gap: 2px; }
+.nav-section, .nav-add {
+  position: relative; display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; padding: 0;
+  border: 0; border-radius: 10px; background: transparent; color: rgb(0 0 0 / 60%); transition: background 150ms ease;
 }
-.add-tile.active { box-shadow: inset 0 0 0 1.5px var(--ink); }
-.rail {
-  position: absolute; left: 8px; top: 152px; width: 80px; display: flex; flex-direction: column;
-  border-radius: 16px; background: #00000014; backdrop-filter: blur(4.85px);
+.nav-section .glyph { width: 20px; height: 20px; }
+.nav-section.active { background: #fff; color: #000; box-shadow: #0C0C0D14 0 1px 2px; }
+.nav-add { background: var(--lime); }
+.nav-add svg { width: 13px; height: 13px; }
+.nav-add.active { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.tip {
+  position: absolute; top: calc(100% + 11px); left: 50%; translate: -50% 0; display: flex; align-items: center;
+  height: 26px; padding: 0 9px; border-radius: 7px; background: var(--ink); color: #fff; box-shadow: #28271F24 0 4px 12px;
+  font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translateY(-2px); transition: opacity 120ms ease, transform 120ms ease;
 }
-.rail-item {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  padding: 16px 12px; border: 0; border-radius: 16px; background: transparent;
-  font-size: 12px; line-height: 20px; color: rgb(0 0 0 / 60%); transition: background 150ms ease;
-}
-.rail-item > span:last-child { color: var(--ink); }
-.rail-item.active { background: #fff; color: #000; }
-.rail-item.active > span:last-child, .rail-item:hover > span:last-child { font-weight: 500; }
+.tip::before { content: ""; position: absolute; bottom: 100%; left: 50%; translate: -50% 0; border: 5px solid transparent; border-bottom-color: var(--ink); border-top: 0; }
+.nav-section:hover .tip, .nav-add:hover .tip, .nav-section:focus-visible .tip, .nav-add:focus-visible .tip { opacity: 1; transform: none; transition-delay: 250ms; }
 .glyph { position: relative; display: block; width: 24px; height: 24px; flex-shrink: 0; overflow: clip; }
 .glyph svg { position: absolute; display: block; overflow: visible; }
 
 /* Panel shell (Decisions, Replace, My things share it) */
 .panel {
-  position: absolute; left: 96px; top: 64px; width: 360px; max-height: min(731px, calc(100dvh - 80px));
+  position: absolute; left: 8px; top: 64px; width: 360px; max-height: min(731px, calc(100dvh - 80px));
   display: flex; flex-direction: column; overflow: clip;
   background: #F6F5F0B0; border: 1px solid #FFFFFFA6; border-radius: 14px;
   /* Standard property only: Lightning CSS adds the -webkit- prefix (writing both made it drop the standard one). */
@@ -165,7 +166,7 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 .filter-button { position: relative; }
 .filter-dot { position: absolute; top: 5px; right: 5px; width: 6px; height: 6px; border-radius: 3px; background: #B7C40F; box-shadow: 0 0 0 1.5px #F6F5F0; }
 .filter-menu {
-  position: absolute; left: 172px; top: 106px; z-index: 5; width: 244px; display: flex; flex-direction: column; padding: 6px;
+  position: absolute; left: 84px; top: 106px; z-index: 5; width: 244px; display: flex; flex-direction: column; padding: 6px;
   background: #fff; border-radius: 12px; box-shadow: #0000000F 0 0 0 1px, #28271F14 0 4px 10px, #28271F24 0 16px 40px;
   transform-origin: top right; animation: menu-in 140ms var(--ease-out);
 }
@@ -267,8 +268,8 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 
 @media (hover: hover) and (pointer: fine) {
   .project-switcher:hover, .icon-button:hover { background: #FFFFFF59; }
-  .rail-item:not(.active):hover { background: #FFFFFFA8; }
-  .share-button:hover, .add-tile:hover { background: #DDF24F; }
+  .nav-section:not(.active):hover { background: #FFFFFFA8; }
+  .share-button:hover, .nav-add:hover { background: #DDF24F; }
   .chip.before:hover { background: #fff; color: var(--ink); box-shadow: var(--chip-ring); }
   .chip.after:hover { box-shadow: var(--chip-ring), #0C0C0D14 0 1px 2px; }
   .chip.after.at-risk:hover { box-shadow: var(--chip-ring), #C5383859 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
@@ -282,8 +283,8 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
 @media (max-width: 720px) {
-  .nav-pill { width: calc(100vw - 16px); }
+  .nav-pill { max-width: calc(100vw - 16px); overflow-x: auto; }
   .nav-actions { top: auto; bottom: 16px; right: 16px; }
-  .panel { left: 96px; width: calc(100vw - 104px); }
+  .panel { left: 8px; width: calc(100vw - 16px); }
 }
 .option-name, .option-maker { display: block; }
