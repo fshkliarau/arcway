@@ -83,13 +83,14 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 .dock-add svg { width: 13px; height: 13px; }
 .dock-add.active { box-shadow: inset 0 0 0 1.5px var(--ink); }
 .tip {
-  position: absolute; left: calc(100% + 9px); top: 50%; translate: 0 -50%; display: flex; align-items: center;
+  /* place-self: start — inside the grid button, auto alignment would re-centre it below top: 50%. */
+  position: absolute; left: calc(100% + 9px); top: 50%; translate: 0 -50%; place-self: start; display: flex; align-items: center;
   height: 28px; padding: 0 10px; border-radius: 8px; background: #000000CF; color: #fff;
   box-shadow: #0000000F 0 0 0 1px, #28271F14 0 4px 10px; backdrop-filter: blur(8px);
   font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; pointer-events: none;
-  opacity: 0; transform: translateX(-3px); transition: opacity 120ms ease, transform 120ms ease;
+  opacity: 0; transform: translateX(-3px); transition: opacity 90ms ease, transform 90ms ease;
 }
-.dock-item:hover .tip, .dock-add:hover .tip, .dock-item:focus-visible .tip, .dock-add:focus-visible .tip { opacity: 1; transform: none; transition-delay: 250ms; }
+.dock-item:hover .tip, .dock-add:hover .tip, .dock-item:focus-visible .tip, .dock-add:focus-visible .tip { opacity: 1; transform: none; transition-delay: 50ms; }
 .glyph { position: relative; display: block; width: 24px; height: 24px; flex-shrink: 0; overflow: clip; }
 .glyph svg { position: absolute; display: block; overflow: visible; }
 
