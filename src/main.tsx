@@ -7,15 +7,15 @@ import { mockProduct, validProductUrl, type PersonalItem } from './personalItems
 import { ALTERNATIVES, formatDate, type Alternative } from './replacements';
 import { productShots } from './kitchen/productShots';
 import type { PendantKind } from './kitchen/pendants';
-import { TopNav } from './ui/Shell';
+import { Dock, TopNav } from './ui/Shell';
 import DecisionsPanel from './ui/DecisionsPanel';
 import ReplacePanel from './ui/ReplacePanel';
 import MyThingsPanel, { type Stage } from './ui/MyThingsPanel';
 import './styles.css';
 
 type PanelId = 'decisions' | 'replace' | 'things' | null;
-// Screen width covered on the left: the panel (8px margin + 360px) when open.
-const PANEL_EDGE = 368;
+// Screen width covered on the left: the dock (8 + 48px), plus the panel (8 + 360px) when open.
+const DOCK_EDGE = 56, PANEL_EDGE = 424;
 
 function App() {
   const [panel, setPanel] = useState<PanelId>('decisions');
@@ -99,13 +99,14 @@ function App() {
     ...(panel === 'replace' && replacePreview ? { pendant: replacePreview } : {}),
   }), [decisions, previewing, preview, panel, replacePreview]);
   const focus: DecisionId | null = panel === 'replace' ? 'pendant' : panel === 'decisions' ? hovered : null;
-  const inset = panel ? PANEL_EDGE : 0;
+  const inset = panel ? PANEL_EDGE : DOCK_EDGE;
 
   return <main>
     <div className="scene">
       <Kitchen item={personalItems[0] ?? null} settled={stage === 'placed'} reduced={reduced} finishes={finishes} focus={focus} inset={inset} />
     </div>
-    <TopNav estimate={money(totals.now)} active={panel === 'things' ? 'things' : panel ? 'decisions' : null}
+    <TopNav estimate={money(totals.now)} />
+    <Dock active={panel === 'things' ? 'things' : panel ? 'decisions' : null}
       onAdd={() => open(panel === 'things' ? null : 'things')} onDecisions={() => open(panel === 'decisions' || panel === 'replace' ? null : 'decisions')} />
     {(panel === 'decisions' || panel === 'replace') && <DecisionsPanel decisions={decisions} read={read} previewing={previewing} hidden={panel === 'replace'} totals={totals}
       onCardEnter={enterCard} onCardLeave={leaveCard} onPreview={setPreviewing} onReplace={() => open('replace')} onClose={() => open(null)} onMarkAllSeen={markAllSeen} />}

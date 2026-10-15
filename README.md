@@ -1,6 +1,6 @@
 # Arcway — Johnson Residence
 
-A React 19 + React Three Fiber / Three.js prototype: a photoreal 3D kitchen with the Arcway shell (Paper: "Minimal nav — Option 4 · In top bar") for reviewing the decisions made on a home.
+A React 19 + React Three Fiber / Three.js prototype: a photoreal 3D kitchen with the Arcway shell (Paper: "Minimal nav — Option 2 · Floating dock") for reviewing the decisions made on a home.
 
 ## Run
 
@@ -21,14 +21,14 @@ Keyboard focus mirrors hover. Escape steps back out of Replace / My things. Redu
 
 ## My things
 
-"+" in the top bar: paste any HTTP(S) product link → mocked recognition (2.1 s, nothing is fetched) → an approximate HAY CPH 30 table (2.0 × 0.8 × 0.74 m) arrives and the camera reframes the dining area. My things never affect the home estimate.
+"+" in the dock: paste any HTTP(S) product link → mocked recognition (2.1 s, nothing is fetched) → an approximate HAY CPH 30 table (2.0 × 0.8 × 0.74 m) arrives and the camera reframes the dining area. My things never affect the home estimate.
 
 ## Tune
 
 - `src/decisions.ts`: decision log data, finish variants per option, estimate maths.
 - `src/replacements.ts`: replacement pendants, questionnaire, and the scoring behind the recommendation.
 - `src/main.tsx`: app state — panels, read state, hover focus, previews, replacement and My things flows.
-- `src/ui/`: `Shell.tsx` (top nav with section icons and hover labels), `DecisionsPanel.tsx`, `ReplacePanel.tsx`, `MyThingsPanel.tsx`, `icons.tsx` (paths from Paper).
+- `src/ui/`: `Shell.tsx` (header with progressive blur, floating dock with hover labels), `DecisionsPanel.tsx`, `ReplacePanel.tsx`, `MyThingsPanel.tsx`, `icons.tsx` (paths from Paper).
 - `src/styles.css`: shell styles, values from the Paper design. Fonts: Aktiv Grotesk Corp and Inter load from the local machine (fall back to system-ui elsewhere); Space Grotesk is bundled.
 - `src/Kitchen.tsx`: canvas, daylight rig, PCSS soft shadows, post stack, camera rig (focus views, horizontal lens shift that re-centres the room beside the panel).
 - `src/kitchen/finishes.ts`: context carrying the finishes the scene renders.

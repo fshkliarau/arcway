@@ -10,7 +10,7 @@ type Props = {
   onStart: () => void; onUrl: (url: string) => void; onSubmit: (e: FormEvent) => void; onRemove: () => void; onClose: () => void;
 };
 
-// "+" in the top bar: try your own furniture in the home (mocked recognition).
+// "+" in the dock: try your own furniture in the home (mocked recognition).
 export default function MyThingsPanel({ stage, step, url, error, onStart, onUrl, onSubmit, onRemove, onClose }: Props) {
   return <section className="panel" aria-label="My things">
     <div className="panel-header">
