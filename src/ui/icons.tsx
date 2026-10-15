@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 const ink = '#18181B';
 
 export const MenuIcon = () => <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true">
-  <path d="M.65 0h14.7M.65 6h14.7M.65 11.35h14.7" fill="none" stroke="#18181BB3" strokeWidth="1.3" strokeLinecap="round" />
+  {/* Lines sit inside the box so no stroke is clipped; all three render at the same weight. */}
+  <path d="M1 1h14M1 6h14M1 11h14" fill="none" stroke="#18181BB3" strokeWidth="1.3" strokeLinecap="round" />
 </svg>;
 
 export const ArcwayLogo = () => <svg viewBox="0 0 78.46 20" width="78.46" height="20" role="img" aria-label="Arcway">

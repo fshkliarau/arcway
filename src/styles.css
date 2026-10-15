@@ -35,7 +35,7 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 /* Top nav: compact pill + estimate / share */
 .nav-pill {
   position: absolute; left: 8px; top: 8px; width: 416px; height: 48px;
-  display: flex; align-items: center; gap: 16px; padding: 0 8px 0 18px; border-radius: 16px;
+  display: flex; align-items: center; gap: 16px; padding: 0 8px 0 14px; border-radius: 16px; /* menu icon centres on the dock (x = 32px) */
 }
 .nav-icon { display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0; padding: 0; border: 0; background: none; }
 .nav-divider { width: 1px; height: 20px; background: #18181B1F; flex-shrink: 0; }
