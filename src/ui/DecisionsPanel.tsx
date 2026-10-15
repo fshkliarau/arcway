@@ -72,12 +72,8 @@ export default function DecisionsPanel({ decisions, read, previewing, hidden, to
           </div>
         </div>
 
-        {kitchen.length > 0 && <>
-          <div className="section-head">
-            <h3 className="section-title">Kitchen</h3>
-            {unread > 0 && <span className="section-meta">{unread} new</span>}
-          </div>
-          {kitchen.map(d => <Card key={d.id} entry={d} read={read.has(d.id)} previewing={previewing === d.id}
+        {(kitchen.length > 0 || other.length > 0) && <div className="decision-list">
+          {kitchen.map(d => <Card key={d.id} entry={d} room="Kitchen" read={read.has(d.id)} previewing={previewing === d.id}
             cardProps={{ onPointerEnter: () => onCardEnter(d.id), onPointerLeave: () => onCardLeave(d.id), onFocus: () => onCardEnter(d.id), onBlur: leaveIfOutside(d.id) }}
             onPreview={on => onPreview(on ? d.id : null)}
             footer={<>
@@ -87,12 +83,8 @@ export default function DecisionsPanel({ decisions, read, previewing, hidden, to
               </div>}
               {d.resolved && <div className="resolved"><CheckIcon />{d.resolved}</div>}
             </>} />)}
-        </>}
-
-        {other.length > 0 && <>
-          <div className="section-head"><h3 className="section-title">{roomLabel(room)}</h3><span className="section-meta">Earlier</span></div>
-          {other.map(e => <Card key={e.id} entry={e} read />)}
-        </>}
+          {other.map(e => <Card key={e.id} entry={e} room={roomLabel(e.room)} read />)}
+        </div>}
 
         {showEarlier && <div className="earlier-wrap">
           <button className="earlier">
@@ -113,19 +105,20 @@ export default function DecisionsPanel({ decisions, read, previewing, hidden, to
   </>;
 }
 
-// One decision: title row, previous → current choice, optional footer.
-function Card({ entry, read, previewing = false, cardProps, onPreview, footer }: {
-  entry: Decision | LogEntry; read: boolean; previewing?: boolean; footer?: ReactNode;
+// One decision (Paper: "Combined nav — Option 3"): room + unseen dot + time, title,
+// previous → current choice, author + price. Transparent until hovered.
+function Card({ entry, room, read, previewing = false, cardProps, onPreview, footer }: {
+  entry: Decision | LogEntry; room: string; read: boolean; previewing?: boolean; footer?: ReactNode;
   cardProps?: HTMLAttributes<HTMLElement>; onPreview?: (on: boolean) => void;
 }) {
   const d = entry, issue = 'issue' in d && d.issue, photo = (c: object) => 'photo' in c ? (c as { photo?: string }).photo : undefined;
-  return <article className={`card decision ${read ? 'read' : ''}`} tabIndex={cardProps ? 0 : undefined}
-    aria-label={`${d.title}: ${d.before.label} to ${d.after.label}, ${signed(d.delta)}${read ? '' : ', new'}`} {...cardProps}>
-    <div className="decision-title">
-      <span className="decision-dot" aria-hidden="true" />
+  return <article className={`decision ${read ? 'read' : ''}`} tabIndex={cardProps ? 0 : undefined}
+    aria-label={`${room}, ${d.title}: ${d.before.label} to ${d.after.label}, ${signed(d.delta)}${read ? '' : ', new'}`} {...cardProps}>
+    <div className="decision-head">
+      <div className="decision-meta">
+        <span>{room}</span><span className="decision-dot" aria-hidden="true" /><span className="decision-time">{d.time}</span>
+      </div>
       <span className="decision-name">{d.title}</span>
-      <span className="decision-meta">{d.author} · {d.time}</span>
-      <span className="decision-delta num">{signed(d.delta)}</span>
     </div>
     <div className="compare">
       <button className={`chip before ${previewing ? 'previewing' : ''}`} aria-label={onPreview ? `Preview previous choice, ${d.before.label}, in 3D` : `Previous choice, ${d.before.label}`}
@@ -136,6 +129,10 @@ function Card({ entry, read, previewing = false, cardProps, onPreview, footer }:
       <div className={`chip after ${issue ? 'at-risk' : ''}`}>
         <Swatch style={d.after.swatch} photo={photo(d.after)} /><span className="chip-label">{d.after.label}</span>
       </div>
+    </div>
+    <div className="decision-foot">
+      <span className="decision-author">{d.author}</span>
+      <span className="decision-delta num">{signed(d.delta)}</span>
     </div>
     {footer}
   </article>;

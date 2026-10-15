@@ -137,29 +137,36 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
 .stat.calm::before { display: none; }
 
 /* Decisions: cards */
-.decision { display: flex; flex-direction: column; gap: 10px; padding: 12px; outline: none; transition: background 160ms ease, box-shadow 160ms ease; }
-.decision:hover, .decision:focus-within { background: #FFFFFFE0; box-shadow: var(--card-inset), #28271F14 0 2px 10px; }
-.decision-title { display: flex; align-items: center; gap: 8px; }
+.decision-list { display: flex; flex-direction: column; }
+.decision { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; outline: none; transition: background 160ms ease; }
+.decision:hover, .decision:focus-within { background: #FFFFFFA6; }
+.decision-head { display: flex; flex-direction: column; gap: 4px; }
+.decision-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; color: #18181B80; }
+.decision-time { flex-grow: 1; text-align: right; }
 .decision-dot {
-  width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; background: var(--dot-new); box-shadow: #E4F2224D 0 0 0 3px;
+  width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0; background: var(--lime-badge); outline: 1px solid #FFFFFFAB;
   transition: width 240ms var(--ease-out), margin 240ms var(--ease-out), opacity 160ms ease, transform 240ms var(--ease-out);
 }
 .decision.read .decision-dot { width: 0; margin-right: -8px; opacity: 0; transform: scale(.4); }
 .decision-name { font-size: 14px; line-height: 20px; font-weight: 500; }
-.decision-meta { flex-grow: 1; font-size: 12px; line-height: 16px; color: #18181B80; }
+.decision-foot { display: flex; align-items: center; gap: 8px; }
+.decision-author { flex-grow: 1; font-size: 12px; line-height: 16px; color: #18181B80; }
 .decision-delta { font-size: 14px; line-height: 20px; font-weight: 500; color: #18181B99; }
 .compare { display: flex; align-items: center; gap: 2px; }
 .compare > svg { flex-shrink: 0; }
 .chip {
   display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0; padding: 8px 6px 8px 8px;
-  border: 0; border-radius: 12px; text-align: left; font-size: 13px; line-height: 18px; font-weight: 500;
+  border: 0; border-radius: 8px; text-align: left; font-size: 13px; line-height: 18px; font-weight: 500;
   transition: background 150ms ease, box-shadow 150ms ease, color 150ms ease;
 }
 .chip-label { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .chip.before { background: #0000000A; color: #18181B99; }
 .chip.before .swatch { opacity: .75; transition: opacity 150ms ease; }
-.chip.after { background: #fff; box-shadow: #0C0C0D14 0 1px 2px; }
-.chip.after.at-risk { box-shadow: #C5383859 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
+/* Current choice: muted at rest, lifts to white when its card is hovered. */
+.chip.after { background: #0000000A; color: #18181B99; transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease; }
+.chip.after.at-risk { box-shadow: #C5383859 0 0 0 1px inset; }
+.decision:hover .chip.after, .decision:focus-within .chip.after { background: #fff; color: var(--ink); box-shadow: #0000000A 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
+.decision:hover .chip.after.at-risk, .decision:focus-within .chip.after.at-risk { box-shadow: #C5383859 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
 /* Hovered option: soft outside stroke rather than a hard outline. */
 .chip.previewing { background: #fff; color: var(--ink); box-shadow: var(--chip-ring); }
 .chip.previewing .swatch { opacity: 1; }
@@ -287,8 +294,8 @@ main { position: relative; height: 100dvh; min-height: 560px; overflow: hidden; 
   .project-switcher:hover { background: #FFFFFF59; }
   .share-button:hover, .dock-add:hover { background: #DDF24F; }
   .chip.before:hover { background: #fff; color: var(--ink); box-shadow: var(--chip-ring); }
-  .chip.after:hover { box-shadow: var(--chip-ring), #0C0C0D14 0 1px 2px; }
-  .chip.after.at-risk:hover { box-shadow: var(--chip-ring), #C5383859 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
+  .decision .chip.after:hover { box-shadow: var(--chip-ring), #0000000A 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
+  .decision .chip.after.at-risk:hover { box-shadow: var(--chip-ring), #C5383859 0 0 0 1px inset, #0C0C0D14 0 1px 2px; }
   .chip.before:hover .swatch { opacity: 1; }
   .dark-button:hover, .button.primary:not(:disabled):hover { background: #2C2C31; }
   .button.secondary:hover { background: #00000012; }
